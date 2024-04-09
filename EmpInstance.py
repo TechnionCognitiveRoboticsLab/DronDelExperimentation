@@ -11,7 +11,7 @@ class EmpInstance(Instance.Instance):
         self.agents, self.agents_map = instance.make_agents_and_agents_map(self.map_map, Agent.DetAgent)
         self.horizon = instance.horizon
         self.initial_state = State.EmpState(instance)
-        self.flybys = instance.dropoffs
+        self.dropoffs = instance.dropoffs
 
     def regenerate_instance(self):
         self.generate_rewards()

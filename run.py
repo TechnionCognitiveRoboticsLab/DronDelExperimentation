@@ -95,8 +95,7 @@ def multi_run():
         'ASTAR',
         #'DFS'
     ]
-    computer = "loc" if multiprocessing.cpu_count() < 10 else "ser"
-    name = 'dec_18_sat_' + computer
+    name = 'file_name'
     timeout = 600
     start = time.perf_counter()
     decoder = instance_decoder.Decoder()

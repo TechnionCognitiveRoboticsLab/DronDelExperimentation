@@ -1,0 +1,46 @@
+instanse_name
+horizon
+A
+agent_index
+init_vertex_index
+movement_budget
+resource_budget
+A
+agent_index
+init_vertex_index
+movement_budget
+resource_budget
+A
+agent_index
+init_vertex_index
+movement_budget
+resource_budget
+A
+agent_index
+init_vertex_index
+movement_budget
+resource_budget
+V
+vertex_num
+N
+neighbour1 
+neighbour2 ...
+P
+prob_for_1
+prob_for2 
+prob_for3 ...
+V
+vertex_num
+neighbour1 neighbour2 ...
+prob_for_1 prob_for2 prob_for3 ...
+V
+vertex_num
+neighbour1 neighbour2 ...
+prob_for_1 prob_for2 prob_for3 ...
+V
+vertex_num
+neighbour1 neighbour2 ...
+prob_for_1 prob_for2 prob_for3 ...
+
+
+

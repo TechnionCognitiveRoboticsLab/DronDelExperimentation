@@ -8,7 +8,6 @@ import Vertex
 import Agent
 import Instance
 import copy
-import MatricesFunctions
 
 
 class VectorInstance(Instance.Instance):
@@ -19,7 +18,7 @@ class VectorInstance(Instance.Instance):
         self.horizon = instance.horizon
         self.initial_state = State.VectorState(instance)
         self.initial_state.time_left = self.horizon
-        self.flybys = instance.dropoffs
+        self.dropoffs = instance.dropoffs
 
     def make_action(self, action, state):
         new_state = state.copy()

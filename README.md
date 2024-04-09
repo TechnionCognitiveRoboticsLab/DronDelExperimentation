@@ -1,26 +1,15 @@
 # DronDelExperimentation
-This repository contains an implementation of ideas outlined in the paper titled <Paper Name>. The code provided allows for the execution of specific instances and simultaneous runs through the use of Python scripts.
-
+Welcome to the DronDelExperimentation repository! This repository hosts an implementation of concepts detailed in the paper titled "A Deterministic Search Approach for Solving Stochastic Drone Search and Rescue Planning Without Communication". Our codebase facilitates the execution of specific instances and concurrent runs using Python.
 ## Overview
-In this project you may find the code required to run the experiments as well as some of the maps we used, encoded in a way described in the InstanceFormat file.
-The main functionality of this project is encapsulated within the run.py script. Within this script, you will find two primary functions:
+Within this repository, you'll discover essential code for conducting experiments, along with select maps we utilized. These maps are encoded following the specifications outlined in the InstanceFormat file.
 
-- The single_run() function facilitates the execution of the code for a single instance. 
+The core functionality of this project is centralized in the run.py script, particularly within the run_solver function. This function accepts as parameters: an instance object that specifies the details of a problem, an algorithm chosen by the user, timeout which defines how much time will the code run before it returns the best solution, and a parameter called "return_path". When set to true, this parameter returns the best-found path; when set to false, it generates a CSV file containing run data.
 
-- The multi_run() function allows for running multiple instances simultaneously.
+Additionally, run.py includes two auxiliary functions: single_run and multi_run. These serve as examples illustrating how to execute the code. The single_run function is tailored for running a single instance, while multi_run enables the simultaneous execution of multiple instances across different processes.
 
-Both of those functions use the decode_reduced() function, in which the parameters for the needed instances are set as well as the path to the folder in which they are located. 
-
-
-## Usage
-
-To utilize the provided functionality, follow these steps:
-
-Open the run.py script.
-Adjust the parameters for wanted instances within the single_run or multi_run function.
-Run the single_run() function to execute the code for a single instance, or run the multi_run() function to execute multiple instances simultaneously.
+For comprehensive analysis of instances stored in an encoded format within the maps folder, we utilize the decode_reduced function of a decoder object. This function decodes maps from the designated folder and applies filtering based on user-defined criteria. Please note that timing of procceses is implemented using the 'time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)' function which is only available on UNIX based platforms.
 
 ## License
 
-This project is licensed under the [License Name] - see the LICENSE file for details.
+This project is licensed under the MIT License 
 

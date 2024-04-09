@@ -71,8 +71,8 @@ def run_solver(inst, algo, timeout=1800, default='-', dup_det=True, return_path=
 def single_run():
     timeout = 300
     decoder = instance_decoder.Decoder()
-    decoder.decode_reduced(file_path='new_small_maps', types_allowed='SC')
-    inst = decoder.instances[4]
+    decoder.decode_reduced(file_path='maps')
+    inst = decoder.instances[0]
     name = 'scratch'
     # Inst_visualizer.vis3(inst, name)
     algo = 'GBNB'
@@ -99,7 +99,7 @@ def multi_run():
     timeout = 600
     start = time.perf_counter()
     decoder = instance_decoder.Decoder()
-    decoder.decode_reduced()
+    decoder.decode_reduced(file_path='maps')
     instances = decoder.instances
     runs_left = len(instances)*len(algos)
     max_workers = 4  # round(multiprocessing.cpu_count() * 0.10)

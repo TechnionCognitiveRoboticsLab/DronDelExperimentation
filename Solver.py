@@ -36,7 +36,7 @@ class Solver:
         self.dist_calculated = False
         self.all_pair_distances = {}
         self.num_of_states = None
-        self.dup_det = False
+        self.dup_det = True
 
         self.NUMBER_OF_SIMULATIONS = 999999
         self.DISCOUNT = 1

@@ -26,10 +26,10 @@ def write_data(r, name, ):
               header=False)
 
 
-def run_solver(inst, algo, timeout=1800, default='-', dup_det=True, return_path=False):
+def run_solver(inst, algo, timeout=1800, default='-', return_path=False):
     print("start " + inst.name, algo)
     solver = Solver.Solver(inst)
-    solver.dup_det = dup_det
+    solver.dup_det = True
     solver.timeout = timeout
     solver.return_path = return_path
     results = None

@@ -1,6 +1,5 @@
 # DronDelExperimentation
-Welcome to the DronDelExperimentation repository! This repository hosts an implementation of concepts detailed in the paper titled "A Deterministic Search Approach for Solving Stochastic Drone Search and Rescue Planning Without Communication". Our codebase facilitates the execution of specific instances and concurrent runs using Python.
-## Overview
+Welcome to the DronDelExperimentation repository! This repository hosts an implementation of concepts detailed in the paper titled "A Deterministic Search Approach for Solving Stochastic Drone Search and Rescue Planning Without Communication". 
 Within this repository, you'll discover essential code for conducting experiments, along with select maps we utilized. These maps are encoded following the specifications outlined in the InstanceFormat file.
 
 The core functionality of this project is centralized in the run.py script, particularly within the run_solver function. This function accepts as parameters: an instance object that specifies the details of a problem, an algorithm chosen by the user, timeout which defines how much time will the code run before it returns the best solution, and a parameter called "return_path". When set to true, this parameter returns the best-found path; when set to false, it generates a CSV file containing run data.

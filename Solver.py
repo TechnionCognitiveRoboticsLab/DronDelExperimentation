@@ -315,7 +315,7 @@ class Solver:
                 if len(node.children) > 0:
                     breakpoint()
                 children = [self.instance.make_action(action, node.state) for action in
-                            self.instance.actions(node.state)]
+                            self.instance.actions(node.state, node.path)]
                 random.shuffle(children)
                 node.expand(self.instance)
                 self.num_of_states += len(node.children)
@@ -329,7 +329,7 @@ class Solver:
                 path = node.path
 
             while not rollout_state.is_terminal():
-                action = random.choice(self.instance.actions(rollout_state))
+                action = random.choice(self.instance.actions(rollout_state, node.path))
                 if method == 'VEC':
                     for a in path:
                         path[a].append(action[a])

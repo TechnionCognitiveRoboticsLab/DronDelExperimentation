@@ -29,7 +29,7 @@ def write_data(r, name, ):
 
 
 def run_solver(inst, algo, timeout=1800, default='-', return_path=False):
-    print("start " + inst.name, algo)
+    print("Start " + inst.name, algo)
     solver = Solver.Solver(inst)
     solver.dup_det = True
     solver.timeout = timeout

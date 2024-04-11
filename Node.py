@@ -1,4 +1,6 @@
 import math
+from copy import copy
+
 import State
 
 
@@ -83,7 +85,7 @@ class Node:
         self.children = []
         for action in actions:
             child = Node(instance.make_action(action, self.state), self)
-            child.path = self.path.copy()
+            child.path = {a: self.path[a].copy() for a in self.path}
             for a in action:
                 child.path[a].append(action[a])
             child.action = action

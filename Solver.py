@@ -4,6 +4,7 @@ import time
 
 import VectorInstance
 import instance_decoder
+import State
 from Timer import Timer
 
 import EmpInstance
@@ -59,7 +60,7 @@ class Solver:
         self.root = Node.Node(None)
         self.root.state = self.instance.initial_state.copy()
         loc = self.root.state.loc
-        self.root.path = {a: [loc[a]] for a in loc}
+        self.root.path = {a: [State.Action(loc[a], False)] for a in loc}
         self.best_node = self.root
         self.best_value = self.instance.reward(self.root.state)
         self.num_of_states = 0
@@ -370,8 +371,8 @@ class Solver:
         if path is None:
             return 0
         state = self.instance.initial_state.copy()
-        for t in range(len(list(path.values())[0])):
-            action = {a: path[a][t] for a in path}
+        for t in range(1, len(list(path.values())[0])):
+            action = {a: State.Action(path[a][t].loc, path[a][t].dropoff) for a in path}
             state = self.instance.make_action(action, state)
         reward = self.instance.reward(state) if method == 'VEC' \
             else self.instance.average_of_sims(state, 10000)

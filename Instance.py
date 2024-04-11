@@ -65,7 +65,7 @@ class Instance:
                 return False
         return True
 
-    def actions(self, state):
+    def actions(self, state, path):
         # action: {a1: v_k, a2: v_m, ...  }
         agent_actions = {}
         # time = len(state.path[list(state.path.keys())[0]]) - state.time_left - 1
@@ -78,8 +78,10 @@ class Instance:
             if self.agents_map[a_hash].movement_budget <= time:
                 agent_actions[a_hash] = [State.Action(a_loc_hash, True)]
             else:
-                agent_actions[a_hash] = [State.Action(a_loc_hash, b) for b in (True, False)] + \
-                                        [State.Action(n.hash(), b) for n in a_loc.neighbours for b in (True, False)]
+
+                agent_actions[a_hash] = [State.Action(a_loc_hash, False)] + \
+                                        [State.Action(n.hash(), True) for n in a_loc.neighbours if n not in path[a_hash]]+ \
+                                        [State.Action(n.hash(), False) for n in a_loc.neighbours]
         actions = [a for a in one_val_per_key_combinations(agent_actions)]
         return actions
 

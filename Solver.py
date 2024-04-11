@@ -58,6 +58,8 @@ class Solver:
         self.timer.start('log')
         self.root = Node.Node(None)
         self.root.state = self.instance.initial_state.copy()
+        loc = self.root.state.loc
+        self.root.path = {a: [loc[a]] for a in loc}
         self.best_node = self.root
         self.best_value = self.instance.reward(self.root.state)
         self.num_of_states = 0
@@ -86,7 +88,7 @@ class Solver:
                     self.best_node = self.best_node.highest_value_child()
             # print(self.best_value)
             self.timer.log(
-                (self.best_node.get_path(self.instance.agents) if path is None else path, self.num_of_states),
+                (self.best_node.path if path is None else path, self.num_of_states),
                 thing='run', alt_now=now)
             if best_is_none:
                 self.best_node = None
@@ -264,7 +266,6 @@ class Solver:
                     if want_print:
                         self.timer.end_from_last_end('push')
         self.log_if_needed(needed=True)
-        # print(self.best_node.get_path(self.instance.agents))
         return self.get_results()
 
     def value_plus_upper_bound(self, state):
@@ -324,7 +325,7 @@ class Solver:
             node.times_visited += 1
             rollout_state = node.state.copy()
             if method == 'VEC':
-                path = node.get_path(self.instance.agents)
+                path = node.path
 
             while not rollout_state.is_terminal():
                 action = random.choice(self.instance.actions(rollout_state))

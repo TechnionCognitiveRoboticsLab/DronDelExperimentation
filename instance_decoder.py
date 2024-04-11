@@ -42,16 +42,9 @@ class Decoder:
                        specifics=(),
                        max_num=None,
                        sort_by_size=False,
-                       small_ones=False,
                        file_path=None
                         ):
-        if not small_ones:
-            filepath = "Reduced_maps"
-        else:
-            filepath = 'small_map'
-        if file_path is not None:
-            filepath = file_path
-        for filename in os.scandir(filepath):
+        for filename in os.scandir(file_path):
             if filename.is_file():
                 try:
                     decoded_instance = InstanceManager.to_inst(filename)

@@ -1,10 +1,13 @@
 import math
+from copy import copy
+
 import State
 
 
 class Node:
     def __init__(self, state, parent=None):
         self.action = None
+        self.path = None
         self.children = []
         self.parent = parent
         if self.parent is None:
@@ -19,20 +22,8 @@ class Node:
         self.high = 0
         self.low = 0
 
-    def get_path(self, agents):
-        node = self
-
-        path = {a.hash(): [] for a in agents}
-        while True:
-            action = node.action
-            if action is None:
-                return path
-            for a in action:
-                path[a].insert(0, node.action[a])
-            if node.parent.parent is None or node.parent is None or node is None:
-                break
-            node = node.parent
-        return path
+    def get_path(self):
+        return self.path
 
     def __str__(self):
         return " R:" + str(self.value) + " " + str(self.state)
@@ -90,10 +81,13 @@ class Node:
         return max_visits_child
 
     def expand(self, instance):
-        actions = instance.actions(self.state)
+        actions = instance.actions(self.state, self.path)
         self.children = []
         for action in actions:
             child = Node(instance.make_action(action, self.state), self)
+            child.path = {a: self.path[a].copy() for a in self.path}
+            for a in action:
+                child.path[a].append(action[a])
             child.action = action
             self.children.append(child)
 

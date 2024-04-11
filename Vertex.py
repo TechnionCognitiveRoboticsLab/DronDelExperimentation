@@ -2,18 +2,18 @@ import random
 
 
 class Vertex:
-    def __init__(self, x, y):
-        self.xy = (x, y)  # String name
+    def __init__(self, id):
+        self.id = id # String name
         self.neighbours = []  # list of Vertices
         self.distribution = {}  # reward: probability dictionary
 
     def hash(self):
-        if self.xy == -1:
+        if self.id == -1:
             raise Exception("-1 is an unusable hash number.")
-        return self.xy
+        return self.id
 
     def __str__(self):
-        return "v" + str(self.xy)
+        return "v" + str(self.id)
 
     def expectation(self):
         return sum([r * self.distribution[r] for r in self.distribution])
@@ -29,8 +29,8 @@ class Vertex:
 
 
 class EmpVertex(Vertex):
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, id):
+        super().__init__(id)
         self.is_empty = False
         self.reward = 0
 
@@ -50,9 +50,9 @@ class EmpVertex(Vertex):
         self.is_empty = (self.reward == 0)
 
     def __str__(self):
-        return "det_v" + str(self.xy) + " " + str(self.reward) + " " + str(self.is_empty)
+        return "det_v" + str(self.id) + " " + str(self.reward) + " " + str(self.is_empty)
 
 
 class Stoch_Vertex(Vertex):
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, id):
+        super().__init__(id)

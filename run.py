@@ -21,13 +21,15 @@ def write_data(r, name, ):
     print({'inst_name': inst.name, 'num_agents': len(inst.agents), 'map_size': len(inst.map),
            'source': inst.source, 'type': inst.type, 'horizon': inst.horizon, 'algo': algo,
            'final_result': fin_res, 'time': t, 'states': states, })
-
-    df.to_csv('data/' + name + '.csv', mode='a', index=False,
-              header=False)
+    try:
+        df.to_csv('data/' + name + '.csv', mode='a', index=False,
+                  header=False)
+    except:
+        print("Save failed, create \'data\' folder to save.")
 
 
 def run_solver(inst, algo, timeout=1800, default='-', return_path=False):
-    print("start " + inst.name, algo)
+    print("Start " + inst.name, algo)
     solver = Solver.Solver(inst)
     solver.dup_det = True
     solver.timeout = timeout
@@ -69,7 +71,7 @@ def run_solver(inst, algo, timeout=1800, default='-', return_path=False):
 
 
 def single_run():
-    timeout = 300
+    timeout = 20
     decoder = instance_decoder.Decoder()
     decoder.decode_reduced(file_path='maps')
     inst = decoder.instances[0]
@@ -93,7 +95,7 @@ def multi_run():
         'BNB',
         'GBNB',
         'ASTAR',
-        #'DFS'
+        # 'DFS'
     ]
     name = 'file_name'
     timeout = 600
@@ -101,7 +103,7 @@ def multi_run():
     decoder = instance_decoder.Decoder()
     decoder.decode_reduced(file_path='maps')
     instances = decoder.instances
-    runs_left = len(instances)*len(algos)
+    runs_left = len(instances) * len(algos)
     max_workers = 4  # round(multiprocessing.cpu_count() * 0.10)
     print(f"Starting multi-run. \nTimeout: {timeout}\n"
           f"Algorithms: {algos}\nMax workers: {max_workers}\n"
@@ -144,5 +146,4 @@ def multi_run():
 
 
 if __name__ == "__main__":
-    multi_run()
-
+    single_run()

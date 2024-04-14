@@ -71,9 +71,11 @@ class Solver:
         results = []
         for t in log:
             reward = round(self.evaluate_path(log[t][0]), 3)
-            reward_emp = round(self.evaluate_path(log[t][0], method='EMP'), 3)
+
+            '''reward_emp = round(self.evaluate_path(log[t][0], method='EMP'), 3)
             if reward_emp != reward:
                 breakpoint()
+            '''
             results.append((reward, log[t][1], round(t, 3)))
         return tuple(results)
 

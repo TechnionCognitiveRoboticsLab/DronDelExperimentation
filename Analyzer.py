@@ -268,8 +268,6 @@ class Analyzer:
             else:
                 inviss.append(plt.plot([1],[1], markers[i % 10], linestyle='-'))
 
-
-
         plt.legend([renames[algo] for algo in self.algos], ncol=2, loc='upper center', bbox_to_anchor=(0.5, -0.3))
         plt.xlabel("Time")
         plt.ylabel("Number of Solved")

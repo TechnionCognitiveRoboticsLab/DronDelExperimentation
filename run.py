@@ -77,7 +77,7 @@ def single_run():
     inst = decoder.instances[0]
     name = 'scratch'
     # Inst_visualizer.vis3(inst, name)
-    algo = 'MCTS_V'
+    algo = 'GBNB'
     solve(inst, algo, timeout, name)
 
 

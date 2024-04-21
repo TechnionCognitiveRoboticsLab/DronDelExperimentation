@@ -81,7 +81,7 @@ class Instance:
                 dests = [a_loc] + [n for n in self.map_map[a_loc].neighbours]
                 agent_actions[a_hash] = [State.Action(n, True) for n in dests if
                                          State.Action(n, True).hash() not in path_hash[a_hash]] + \
-                                        [State.Action(n, False) for n in dests]
+                                        [State.Action(n, False) for n in dests if self.dropoffs]
         actions = [a for a in one_val_per_key_combinations(agent_actions)]
         return actions
 

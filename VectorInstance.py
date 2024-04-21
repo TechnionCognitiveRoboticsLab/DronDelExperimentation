@@ -2,11 +2,11 @@ from abc import ABC
 
 import numpy as np
 
-from . import State
-from . import Instance
-from . import Vertex
-from . import Agent
-from . import Instance
+import State
+import Instance
+import Vertex
+import Agent
+import Instance
 import copy
 from typing import List, Dict, Optional
 

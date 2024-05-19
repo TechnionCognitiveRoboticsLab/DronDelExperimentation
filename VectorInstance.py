@@ -28,7 +28,7 @@ class VectorInstance(Instance.Instance):
             new_state.loc[a_hash] = action[a_hash].loc
             if self.is_timed:
                 new_state.act_lengths = [action[a].length for a in action]
-            if (not action[a_hash].dropoff) or \
+            if (not action[a_hash].dropoff) or (False if not self.is_timed else action[a_hash].length > 0) or\
                     self.agents_map[a_hash].movement_budget < self.horizon - new_state.time_left:
                 continue
             ber = new_state.bers[action[a_hash].loc]

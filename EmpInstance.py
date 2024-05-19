@@ -47,9 +47,11 @@ class EmpInstance(Instance.Instance):
                     if a.movement_budget < t or \
                             a.current_utility_budget == 0 or \
                             state.path[a.hash()][t] is None:
+
                         continue
                     a_loc = self.map_map[state.path[a.hash()][t].loc]
-                    if a_loc is None or a_loc.is_empty or not state.path[a.hash()][t].dropoff:
+                    if a_loc is None or a_loc.is_empty or not state.path[a.hash()][t].dropoff or \
+                            (False if not self.is_timed else state.path[a.hash()][t].length > 0):
                         continue
                     a_loc.is_empty = True
                     round_reward += a_loc.reward

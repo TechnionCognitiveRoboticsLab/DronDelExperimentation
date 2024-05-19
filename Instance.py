@@ -30,10 +30,10 @@ def one_val_per_key_combinations(dict: Dict):
 
 
 class Instance:
-    def __init__(self, name: str, map: List[Vertex.Vertex], agents: List[Agent.Agent], horizon: int, source: str = '-'):
+    def __init__(self, name: str, map: List[Vertex.Vertex], agents: List[Agent.Agent], horizon: int, source: str = '-', is_timed=False, cost = None, dropoff_time = None):
         self.name = name
         self.type = self.name.split('_')[-2]
-        self.map:List[Vertex.Vertex] = map  # list of Vertices
+        self.map: List[Vertex.Vertex] = map  # list of Vertices
         if not self.sum_of_probs_is_1():
             for v in self.map:
                 sum_of_probs = sum(v.distribution.values())
@@ -48,9 +48,18 @@ class Instance:
         self.horizon: int = horizon
         self.initial_state = (agents.copy(), map.copy())
         self.dropoffs: bool = True
-        # self.check_sums_of_probs_is_0()
         self.distance: Dict[int, int] = {}
         self.source = source
+        self.is_timed = False
+        self.is_timed = is_timed
+        self.cost = cost
+        if self.is_timed:
+            for i in self.map_map:
+                cost[(i, i)] = 0
+                for j in self.map_map:
+                    if (i, j) in cost:
+                        cost[(i, j)] = cost[(j, i)]
+        self.dropoff_time = dropoff_time
 
     def get_time(self, state: State):
         return self.horizon - state.time_left
@@ -75,13 +84,31 @@ class Instance:
         path_hash = {a: tuple((act.hash() for act in path[a])) for a in path}
         for a_hash in self.agents_map:
             a_loc = state.get_loc(a_hash)
-            if self.agents_map[a_hash].movement_budget <= time:
-                agent_actions[a_hash] = [State.Action(a_loc, True)]
+            if self.is_timed:
+                last_action = path[a_hash][-1]
+                if path[a_hash][-1].length > 0:
+                    agent_actions[a_hash] = [State.TimedAction(last_action.length-1, last_action.loc, last_action.dropoff)]
+                    continue
+                if self.agents_map[a_hash].movement_budget <= time:
+                    agent_actions[a_hash] = [State.TimedAction(self.horizon, a_loc, False)]
+                else:
+                    dests = [a_loc] + [n for n in self.map_map[a_loc].neighbours]
+                    agent_actions[a_hash] = [State.TimedAction(self.cost[a_loc, n], n, False) for n in dests if
+                                             n in path_hash[a_hash]] + \
+                                            [State.TimedAction(self.cost[a_loc, n] + self.dropoff_time, n, True) for n
+                                             in dests if n not in path_hash[a_hash]] + \
+                                            [State.TimedAction(self.cost[a_loc, n], n, False) for n in dests if
+                                             (n not in path_hash[a_hash]) and self.dropoffs]
             else:
-                dests = [a_loc] + [n for n in self.map_map[a_loc].neighbours]
-                agent_actions[a_hash] = [State.Action(n, True) for n in dests if
-                                         State.Action(n, True).hash() not in path_hash[a_hash]] + \
-                                        [State.Action(n, False) for n in dests if self.dropoffs]
+
+                if self.agents_map[a_hash].movement_budget <= time:
+                    agent_actions[a_hash] = [State.Action(a_loc, True)]
+                else:
+                    dests = [a_loc] + [n for n in self.map_map[a_loc].neighbours]
+                    agent_actions[a_hash] = [State.Action(n, False) for n in dests if n in path_hash[a_hash]] + \
+                                            [State.Action(n, True) for n in dests if n not in path_hash[a_hash]] + \
+                                            [State.Action(n, False) for n in dests if
+                                         (n not in path_hash[a_hash]) and self.dropoffs]
         actions = [a for a in one_val_per_key_combinations(agent_actions)]
         return actions
 
@@ -141,3 +168,5 @@ class Instance:
 
     def make_action(self, action: List[State.Action], state: State):  # Abstract method
         pass
+
+

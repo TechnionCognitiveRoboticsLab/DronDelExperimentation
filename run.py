@@ -4,9 +4,12 @@ import sys
 import time
 import tracemalloc
 from multiprocessing import Process
+import random
 
 import pandas as pd
 import psutil
+
+import Instance
 import Solver
 import instance_decoder
 
@@ -75,10 +78,14 @@ def single_run():
     decoder = instance_decoder.Decoder()
     decoder.decode_reduced(file_path='maps')
     inst = decoder.instances[0]
-    name = 'scratch'
-    # Inst_visualizer.vis3(inst, name)
-    algo = 'GBNB'
-    solve(inst, algo, timeout, name)
+    cost = {(i, j): random.randint(1, 7) for i in inst.map_map for j in inst.map_map if j in inst.map_map[i].neighbours}
+    inst.is_timed = True
+    inst.cost = cost
+    for a in inst.agents:
+        a.movement_budget = 30
+    inst.dropoff_time = 4
+    inst.horizon=30
+    print(run_solver(inst, 'ASTAR', timeout, return_path=True))
 
 
 def solve(*args):
@@ -89,16 +96,16 @@ def multi_run():
     algos = [
         'MCTS_E',
         'MCTS_V',
-        #'MCTS_S',
+        # 'MCTS_S',
         'BFS',
-        #'BNBL',
+        # 'BNBL',
         'BNB',
-        'GBNB',
-        #'ASTAR',
+        # 'GBNB',
+        'ASTAR',
         # 'DFS'
     ]
-    name = 'apr_11'
-    timeout = 20
+    name = 'apr_21'
+    timeout = 300
     start = time.perf_counter()
     decoder = instance_decoder.Decoder()
     decoder.decode_reduced(file_path='maps')

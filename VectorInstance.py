@@ -13,7 +13,7 @@ from typing import List, Dict, Optional
 
 class VectorInstance(Instance.Instance):
     def __init__(self, instance: Instance):
-        super().__init__(instance.name, instance.map, instance.agents, instance.horizon)
+        super().__init__(instance.name, instance.map, instance.agents, instance.horizon, is_timed=instance.is_timed, cost=instance.cost, dropoff_time=instance.dropoff_time)
         self.map, self.map_map = instance.make_special_map_and_map_map(Vertex.Stoch_Vertex)
         self.agents, self.agents_map = instance.make_agents_and_agents_map(Agent.StochAgent)
         self.horizon = instance.horizon
@@ -21,11 +21,13 @@ class VectorInstance(Instance.Instance):
         self.initial_state.time_left = self.horizon
         self.dropoffs = instance.dropoffs
 
-    def make_action(self, action: Dict[int, State.Action], state: State):
+    def make_action(self, action: Dict[int, State.Action], state: State.VectorState):
         new_state = state.copy()
         new_state.time_left -= 1
         for a_hash in self.agents_map:
             new_state.loc[a_hash] = action[a_hash].loc
+            if self.is_timed:
+                new_state.act_lengths = [action[a].length for a in action]
             if (not action[a_hash].dropoff) or \
                     self.agents_map[a_hash].movement_budget < self.horizon - new_state.time_left:
                 continue

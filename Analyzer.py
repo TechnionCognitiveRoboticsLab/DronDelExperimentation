@@ -79,7 +79,6 @@ class Analyzer:
     def __init__(self, filepath):
         self.data_for_graphs = None
         self.acc = None
-        self.instaces = None
         self.timeout = None
         self.allowed_types = None
         self.algos = None
@@ -112,9 +111,9 @@ class Analyzer:
         fin_ress = {algo: [] for algo in self.algos}
         sizes = {algo: [] for algo in self.algos}
         states = {algo: [] for algo in self.algos}
-        default = 'BFS'
         num_of_types = {type: 0 for type in self.allowed_types}
-        def_time = self.timeout  # max([run.results[-1][2] for run in analyzer.runs])  # instance_runs[default].results[-1][2]
+        def_time = self.timeout  # max([run.results[-1][2] for run in analyzer.runs])  # instance_runs[
+        # default].results[-1][2]
         for inst_name in self.instances:
 
             instance_runs = self.instances[inst_name]
@@ -132,7 +131,10 @@ class Analyzer:
 
             # if instance_runs['BFS'].source == 'X' or instance_runs['BFS'].type != 'MT':
             #    continue
-
+            lst = [instance_runs[algo].results[-1][0] for algo in self.algos if algo in instance_runs]
+            if len(lst)==0:
+                assert len([algo for algo in self.algos if algo in instance_runs])
+                continue
             max_result = max([instance_runs[algo].results[-1][0] for algo in self.algos if algo in instance_runs])
             def_states = 1  # max([instance_runs[algo].results[-1][1] for algo in self.algos if algo in instance_runs])
 
@@ -158,7 +160,8 @@ class Analyzer:
                         round(pair[0] / max_result, self.acc)
 
                     if pair[0] > 1:
-                        breakpoint()
+                        pass
+                        #breakpoint()
                     pair[1] = pair[1]
                     pair[2] = round(pair[2])
                 if algo not in self.data_for_graphs:
@@ -211,7 +214,7 @@ class Analyzer:
         plt.xlim(self.timeout / 20, self.timeout)
 
 
-        #plt.legend([renames[algo] for algo in self.algos])
+        plt.legend([renames[algo] for algo in self.algos])
         plt.tight_layout()
         print("States (relative to best states):")
         for algo in self.data_for_tables:
@@ -254,11 +257,6 @@ class Analyzer:
 
         markers = ['>', '+', '.', ',', 'o', 'v', 'x', 'X', 'D', '|']
 
-        self.algos = sorted(['MCTS_V',
-        'MCTS_S',
-        'ASTAR',
-        'BFS',])
-
         inviss = []
         plt.figure(figsize=(6.4, 6.6))
         for i in range(len(self.algos)):
@@ -268,7 +266,7 @@ class Analyzer:
             else:
                 inviss.append(plt.plot([1],[1], markers[i % 10], linestyle='-'))
 
-        plt.legend([renames[algo] for algo in self.algos], ncol=2, loc='upper center', bbox_to_anchor=(0.5, -0.3))
+        plt.legend([renames[algo] for algo in self.algos])#, ncol=2, loc='upper center', bbox_to_anchor=(0.5, -0.3))
         plt.xlabel("Time")
         plt.ylabel("Number of Solved")
         plt.xlim(0, self.timeout)
@@ -295,7 +293,7 @@ class Analyzer:
 
 
 def main():
-    filepath = "data/paper_opt.csv"
+    filepath = "data/apr_21.csv"
     analyzer = Analyzer(filepath)
     analyzer.acc = 2
     analyzer.timeout = 900
@@ -313,7 +311,7 @@ def main():
 
         # 'BNBL',
         # 'BNB',
-        # 'MCTS_E',
+         'MCTS_E',
         # 'GBNB'
     )
 
@@ -345,9 +343,9 @@ def main():
     font = {'family': 'normal',
             'size': 25}
 
-    matplotlib.rc('font', **font)
+    #matplotlib.rc('font', **font)
 
-    analyzer.get_opt_graph()
+    analyzer.get_sat_graph()
 
     # algo = 'BNBL'
     # plt.scatter(sizes[algo], fin_ress[algo])

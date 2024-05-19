@@ -59,7 +59,11 @@ class Solver:
         self.timer.start('log')
         self.root = Node.Node(None)
         self.root.state = self.instance.initial_state.copy()
-        self.root.path = {a: [State.Action(self.root.state.get_loc(a), False)] for a in self.instance.agents_map}
+        if self.instance.is_timed:
+            self.root.path = {a: [State.TimedAction(0, self.root.state.get_loc(a), False)] for a in self.instance.agents_map}
+        else:
+            self.root.path = {a: [State.Action(self.root.state.get_loc(a), False)] for a in self.instance.agents_map}
+
         self.best_node = self.root
         self.best_value = self.instance.reward(self.root.state)
         self.num_of_states = 0
@@ -178,12 +182,14 @@ class Solver:
         steps_left = steps
         ver = start
         path = []
-        while steps_left > 0:
+        while steps_left >= (1 if not self.instance.is_timed else self.instance.dropoff_time):
             reachable = [v for v in self.get_reachable_from(ver, steps_left) if v.hash() not in visited]
             best = max(reachable, key=lambda v: state.bers[v.hash()].e()) if len(reachable) != 0 else None
             if best is None or state.bers[best.hash()].e() == 0:
                 return path
             steps_left -= max(self.all_pair_distances[ver.hash(), best.hash()], 1)
+            if self.instance.is_timed:
+                steps_left -= self.instance.dropoff_time
             path.append(best)
             visited.add(best.hash())
             ver = best
@@ -325,8 +331,6 @@ class Solver:
 
             # expansion
             if not node.state.is_terminal():
-                if len(node.children) > 0:
-                    breakpoint()
                 children = [self.instance.make_action(action, node.state) for action in
                             self.instance.actions(node.state, node.path)]
                 random.shuffle(children)

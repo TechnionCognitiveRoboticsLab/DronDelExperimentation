@@ -111,7 +111,11 @@ def map_reduce(inst):
 
 def calculate_all_pairs_distances_with_Seidel(inst):
     n = len(inst.map)
-    A = matrix([[1 if (inst.map[j].id in inst.map[i].neighbours) else 0 for i in range(n)] for j in range(n)])
+    if inst.is_timed:
+        A = matrix([[inst.cost[(inst.map[i].id, inst.map[j].id)] if (inst.map[j].id in inst.map[i].neighbours) else 0 for i in range(n)] for j in range(n)])
+    else:
+        A = matrix([[1 if (inst.map[j].id in inst.map[i].neighbours) else 0 for i in range(n)] for j in
+                    range(n)])
     assert numpy.sum(A) > 0
     D = apd(A, n)
     return {(inst.map[i].hash(), inst.map[j].hash()): D[i][j] for i in range(n) for j in range(n)}

@@ -38,6 +38,19 @@ class Action:
     def hash(self):
         return self.loc, self.dropoff
 
+class TimedAction(Action):
+    def __init__(self, length, loc: int, dropoff: bool):
+        super().__init__(loc, dropoff)
+        self.length = length
+
+    def hash(self):
+        return self.loc, self.dropoff, self.length
+
+    def __str__(self):
+        return "( " + str(self.loc) + ", " + str(self.dropoff) + ", " + str(self.length)+" )"
+
+
+
 
 class State:
     # Info held by every node. The info is gathered using agents actions only therefore is deterministic.
@@ -89,6 +102,7 @@ class VectorState(State):
     def __init__(self, instance=None):
         super().__init__()
         self.reward: Optional[float] = None
+        self.act_lengths: List[int] = []
         if instance is not None:
             self.loc: Dict[int:int] = {a.hash(): a.loc for a in instance.agents}
             self.bers: Dict[int, Ber] = {v.hash(): Ber(v.bernoulli(), v.p()) for v in instance.map}
@@ -107,7 +121,8 @@ class VectorState(State):
     def hash(self):
         hash = tuple((ah, str(self.loc[ah])) for ah in self.loc), \
                tuple((vh, self.bers[vh].hash()) for vh in self.bers), \
-               tuple((ah, tuple(self.utl[ah])) for ah in self.utl)
+               tuple((ah, tuple(self.utl[ah])) for ah in self.utl), \
+                tuple(self.act_lengths)
         return hash
 
     def calculate_vertex_estimate(self, vertex: Vertex):

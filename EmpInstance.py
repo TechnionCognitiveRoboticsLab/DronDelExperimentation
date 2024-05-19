@@ -13,6 +13,9 @@ class EmpInstance(Instance.Instance):
         self.horizon = instance.horizon
         self.initial_state = State.EmpState(instance)
         self.dropoffs = instance.dropoffs
+        self.is_timed = instance.is_timed
+        self.cost = instance.cost
+        self.dropoff_time = instance.dropoff_time
 
     def regenerate_instance(self):
         self.generate_rewards()
